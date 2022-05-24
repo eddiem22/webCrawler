@@ -1,3 +1,4 @@
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
@@ -34,7 +35,7 @@ const crawl = async({url, ignore}) => {
          fetch(URL).then((response) => {
             const filename = path.basename(imageURL)
             const dest = fs.createWriteStream(`images/${filename}`)
-            //response.body.pipe(dest)
+            response.body.pipe(dest)
         });
         })
     }); 
@@ -43,16 +44,16 @@ const crawl = async({url, ignore}) => {
     .forEach(async(link) => {
         await getURL(link, host, protocol).then((URL) => {
          crawl({url: URL,
-            ignore,
+            //ignore,
         })})
     });
 }
-catch(e){console.log(e);}
+catch(e){}
 }
 
 
 
 crawl({
-    url: "https://www.reddit.com/",
-    ignore: "/search",
+    url: "https://www.youtube.com/",
+    ignore: '/search',
 })
